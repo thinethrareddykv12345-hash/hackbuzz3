@@ -91,7 +91,20 @@ const ProjectDetails = () => {
             <span className="px-2 py-1 rounded bg-primary-600/20 text-primary-400 text-[10px] font-bold uppercase tracking-widest border border-primary-500/30">Active Sprint</span>
             <span className="text-dark-500 text-xs">Started {new Date(project.startDate).toLocaleDateString()}</span>
           </div>
-          <h1 className="text-4xl font-bold text-white">{project.title}</h1>
+          <div className="flex items-center gap-4">
+            <h1 className="text-4xl font-bold text-white">{project.title}</h1>
+            <div 
+              className="px-3 py-1.5 rounded-lg bg-dark-800 border border-dark-700 flex items-center gap-2 group cursor-pointer hover:border-primary-500/50 transition-all"
+              onClick={() => {
+                navigator.clipboard.writeText(project.team?.inviteCode);
+                toast.success('Invite code copied to clipboard!');
+              }}
+              title="Click to copy invite code"
+            >
+              <span className="text-[10px] font-bold text-dark-500 uppercase tracking-widest">Invite Code:</span>
+              <span className="text-sm font-mono font-bold text-primary-400">{project.team?.inviteCode || 'N/A'}</span>
+            </div>
+          </div>
           <p className="text-dark-400 mt-2 max-w-2xl">{project.description}</p>
         </div>
         

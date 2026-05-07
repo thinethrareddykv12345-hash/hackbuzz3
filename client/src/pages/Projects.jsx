@@ -50,6 +50,25 @@ const Projects = () => {
     }
   };
 
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [inviteCode, setInviteCode] = useState('');
+
+  // ... previous useEffect ...
+
+  const handleJoinProject = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/teams/join`, { inviteCode }, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      });
+      toast.success('Successfully joined the team!');
+      setIsJoinModalOpen(false);
+      window.location.reload(); // Refresh to show new project
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invalid invite code');
+    }
+  };
+
   if (loading) return <div className="text-center py-20 text-dark-400">Loading projects...</div>;
 
   return (
@@ -59,10 +78,40 @@ const Projects = () => {
           <h1 className="text-3xl font-bold text-white">Projects</h1>
           <p className="text-dark-400 mt-2">Manage your group projects and tracks progress.</p>
         </div>
-        <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
-          <FiPlus /> New Project
-        </button>
+        <div className="flex gap-4">
+          <button onClick={() => setIsJoinModalOpen(true)} className="btn-secondary flex items-center gap-2">
+            Join with Code
+          </button>
+          <button onClick={() => setIsModalOpen(true)} className="btn-primary flex items-center gap-2">
+            <FiPlus /> New Project
+          </button>
+        </div>
       </header>
+
+      {/* Join Modal */}
+      <AnimatePresence>
+        {isJoinModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-dark-950/80 backdrop-blur-sm">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="glass-card p-8 w-full max-w-md">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-white">Join a Team</h2>
+                <button onClick={() => setIsJoinModalOpen(false)} className="text-dark-400 hover:text-white"><FiX size={24} /></button>
+              </div>
+              <form onSubmit={handleJoinProject} className="space-y-4">
+                <input 
+                  type="text" 
+                  placeholder="Enter Invite Code (e.g. ABC12345)" 
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white uppercase"
+                  required 
+                />
+                <button type="submit" className="btn-primary w-full py-4">Join Project Room</button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (

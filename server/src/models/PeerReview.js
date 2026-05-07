@@ -21,10 +21,9 @@ const peerReviewSchema = new mongoose.Schema(
       required: true,
     },
     ratings: {
-      communication: { type: Number, min: 1, max: 5, required: true },
-      reliability: { type: Number, min: 1, max: 5, required: true },
-      workQuality: { type: Number, min: 1, max: 5, required: true },
-      teamwork: { type: Number, min: 1, max: 5, required: true },
+      effort: { type: Number, min: 1, max: 5, required: true },
+      quality: { type: Number, min: 1, max: 5, required: true },
+      collaboration: { type: Number, min: 1, max: 5, required: true },
     },
     comment: { type: String, maxlength: 500 },
     aiSummary: String,

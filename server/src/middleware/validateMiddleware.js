@@ -52,10 +52,9 @@ const createProjectRules = [
 const peerReviewRules = [
   body('revieweeId').notEmpty().withMessage('Reviewee ID is required'),
   body('projectId').notEmpty().withMessage('Project ID is required'),
-  body('ratings.communication').isInt({ min: 1, max: 5 }),
-  body('ratings.reliability').isInt({ min: 1, max: 5 }),
-  body('ratings.workQuality').isInt({ min: 1, max: 5 }),
-  body('ratings.teamwork').isInt({ min: 1, max: 5 }),
+  body('ratings.effort').isInt({ min: 1, max: 5 }),
+  body('ratings.quality').isInt({ min: 1, max: 5 }),
+  body('ratings.collaboration').isInt({ min: 1, max: 5 }),
 ];
 
 module.exports = {

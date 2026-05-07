@@ -13,7 +13,7 @@ const Feedback = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [rating, setRating] = useState({ communication: 5, reliability: 5, workQuality: 5, teamwork: 5 });
+  const [rating, setRating] = useState({ effort: 5, quality: 5, collaboration: 5 });
   const [comment, setComment] = useState('');
 
   useEffect(() => {
