@@ -45,7 +45,7 @@ const createTeamRules = [
 // Project validators
 const createProjectRules = [
   body('title').trim().notEmpty().withMessage('Project title is required'),
-  body('teamId').notEmpty().withMessage('Team ID is required'),
+  body('teamId').optional().isMongoId().withMessage('Invalid Team ID'),
 ];
 
 // Peer review validators
