@@ -13,7 +13,10 @@ export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) =
     }
     return response.data.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.message);
+    if (error.response && error.response.data && error.response.data.message) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+    return thunkAPI.rejectWithValue(error.message || "Login failed. Please check your connection.");
   }
 });
 
@@ -27,7 +30,10 @@ export const register = createAsyncThunk('auth/register', async (userData, thunk
     }
     return response.data.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.message);
+    if (error.response && error.response.data && error.response.data.message) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+    return thunkAPI.rejectWithValue(error.message || "Registration failed. Please check your connection.");
   }
 });
 

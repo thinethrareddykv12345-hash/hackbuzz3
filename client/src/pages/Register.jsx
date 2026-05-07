@@ -13,11 +13,13 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
     const result = await dispatch(register(formData));
     if (result.meta.requestStatus === 'fulfilled') {
       toast.success('Account created successfully!');
       navigate('/');
     } else {
+      console.error('Registration failed:', result.payload);
       toast.error(result.payload || 'Registration failed');
     }
   };
