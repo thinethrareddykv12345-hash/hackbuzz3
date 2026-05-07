@@ -126,10 +126,10 @@ const ProjectDetails = () => {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center font-bold text-white shadow-lg">
-                      {contribution.user.name.charAt(0)}
+                      {contribution.user?.name?.charAt(0) || 'U'}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-white">{contribution.user.name}</p>
+                      <p className="text-sm font-bold text-white">{contribution.user?.name || 'Anonymous'}</p>
                       <p className="text-[10px] text-dark-500 uppercase tracking-widest">{new Date(contribution.createdAt).toLocaleString()}</p>
                     </div>
                   </div>

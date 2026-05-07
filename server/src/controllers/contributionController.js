@@ -97,7 +97,10 @@ const createContribution = async (req, res) => {
     });
   } catch (e) {}
 
-  successResponse(res, 201, 'Contribution logged', { contribution });
+  // Populate user info for frontend immediate update
+  const populatedContribution = await Contribution.findById(contribution._id).populate('user', 'name avatar');
+
+  successResponse(res, 201, 'Contribution logged', { contribution: populatedContribution });
 };
 
 // @desc    Get contributions for a project
