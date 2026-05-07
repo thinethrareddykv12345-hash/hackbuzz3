@@ -64,6 +64,8 @@ const getMyReviews = async (req, res) => {
     project: projectId,
   });
 
+  console.log(`🔍 Peer Reflection Search: Found ${reviews.length} reviews for this user.`);
+
   // Force trigger if summary is missing OR is just a placeholder
   const needsSummary = reviews.length > 0 && (
     !reviews[0].aiSummary || 

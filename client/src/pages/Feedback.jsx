@@ -23,7 +23,7 @@ const Feedback = () => {
           axios.get(`${import.meta.env.VITE_API_URL}/projects/${projectId}`, {
             headers: { Authorization: `Bearer ${accessToken}` }
           }),
-          axios.get(`${import.meta.env.VITE_API_URL}/peer-reviews/project/${projectId}`, {
+          axios.get(`${import.meta.env.VITE_API_URL}/peer-reviews/project/${projectId}?t=${Date.now()}`, {
             headers: { Authorization: `Bearer ${accessToken}` }
           })
         ]);
