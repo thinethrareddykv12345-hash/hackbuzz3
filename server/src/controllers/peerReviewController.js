@@ -68,11 +68,15 @@ const getMyReviews = async (req, res) => {
   if (reviews.length > 0 && !reviews[0].aiSummary) {
     try {
       const axios = require('axios');
+      console.log(`📡 Requesting AI Summary from: ${process.env.AI_SERVICE_URL}/summarize-feedback`);
+      
       const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/summarize-feedback`, 
         reviews.map(r => ({ ratings: r.ratings, comment: r.comment }))
       );
       
       const summary = aiRes.data.summary;
+      console.log('✅ AI Summary generated successfully');
+      
       await PeerReview.updateMany(
         { reviewee: revieweeId, project: projectId },
         { aiSummary: summary }

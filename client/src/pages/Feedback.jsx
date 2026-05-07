@@ -165,7 +165,7 @@ const Feedback = () => {
                       <span className="text-xs font-bold text-white uppercase tracking-widest">Team Consensus Reflection</span>
                     </div>
                     <p className="text-white text-lg italic leading-relaxed relative z-10">
-                      "{reviews[0]?.aiSummary || 'Our AI is still processing the team consensus. Check back shortly for your unified reflection.'}"
+                      "{reviews[0]?.aiSummary || 'Our AI is currently analyzing the team consensus. This usually takes a few seconds—please refresh the page in a moment to see your insights!'}"
                     </p>
                   </div>
 
