@@ -5,7 +5,6 @@ const Sidebar = () => {
   const menuItems = [
     { icon: FiGrid, label: 'Dashboard', path: '/' },
     { icon: FiLayers, label: 'Projects', path: '/projects' },
-    { icon: FiUsers, label: 'Teams', path: '/teams' },
     { icon: FiPieChart, label: 'Analytics', path: '/analytics' },
     { icon: FiMessageSquare, label: 'Feedback', path: '/feedback' },
   ];
