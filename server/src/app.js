@@ -29,23 +29,35 @@ app.use(helmet());
 // CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: true, // Allow all origins in dev for easier debugging
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   })
 );
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 100,
-  message: { success: false, message: 'Too many requests, please try again later.' },
-});
-app.use('/api/', limiter);
-
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Logging Registration Attempts
+app.use('/api/auth/register', (req, res, next) => {
+  if (req.method === 'POST') {
+    console.log('📝 Incoming Register Request:', { 
+      name: req.body.name, 
+      email: req.body.email,
+      hasPassword: !!req.body.password 
+    });
+  }
+  next();
+});
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 1000, 
+  message: { success: false, message: 'Too many requests' },
+});
+app.use('/api/', limiter);
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
