@@ -60,15 +60,32 @@ class ContributionInput(BaseModel):
 # ============ Endpoints ============
 
 @app.post("/summarize-feedback")
-async def summarize_feedback(reviews: list[PeerReviewData]):
+async def summarize_feedback(reviews: List[dict]):
     if not reviews:
         return {"summary": "No feedback yet."}
     
-    text = "\n".join([f"Ratings: {r.ratings}, Comment: {r.comment}" for r in reviews])
-    prompt = f"Summarize these peer reviews for a student. Be constructive and encouraging:\n{text}"
-    
-    summary = ask_grok(prompt)
-    return {"summary": summary}
+    try:
+        # Extract data safely even if fields are missing or extra fields exist
+        text_parts = []
+        for r in reviews:
+            ratings = r.get("ratings", "N/A")
+            comment = r.get("comment", "")
+            if comment:
+                text_parts.append(f"Ratings: {ratings}, Comment: {comment}")
+        
+        if not text_parts:
+            return {"summary": "No written comments to summarize yet."}
+
+        text = "\n".join(text_parts)
+        prompt = f"Summarize these peer reviews for a student. Be constructive and encouraging:\n{text}"
+        
+        summary = ask_grok(prompt)
+        return {"summary": summary}
+    except Exception as e:
+        import traceback
+        print("❌ CRITICAL PROCESSING ERROR:")
+        traceback.print_exc()
+        return {"summary": f"AI summary failed: {str(e)}"}
 
 @app.post("/analyze-contribution")
 async def analyze_contribution(data: ContributionInput):
