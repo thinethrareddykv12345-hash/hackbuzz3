@@ -56,10 +56,34 @@ const submitReview = async (req, res) => {
 // @desc    Get reviews for a user in a project
 // @route   GET /api/peer-reviews/project/:projectId
 const getMyReviews = async (req, res) => {
-  const reviews = await PeerReview.find({
-    reviewee: req.user._id,
-    project: req.params.projectId,
-  }).select('ratings comment isAnonymous createdAt');
+  const { projectId } = req.params;
+  const revieweeId = req.user._id;
+
+  let reviews = await PeerReview.find({
+    reviewee: revieweeId,
+    project: projectId,
+  });
+
+  // If no summary exists yet, try to generate one now
+  if (reviews.length > 0 && !reviews[0].aiSummary) {
+    try {
+      const axios = require('axios');
+      const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/summarize-feedback`, 
+        reviews.map(r => ({ ratings: r.ratings, comment: r.comment }))
+      );
+      
+      const summary = aiRes.data.summary;
+      await PeerReview.updateMany(
+        { reviewee: revieweeId, project: projectId },
+        { aiSummary: summary }
+      );
+      
+      // Update local reviews object to show the new summary
+      reviews = reviews.map(r => ({ ...r._doc, aiSummary: summary }));
+    } catch (err) {
+      console.error('⚠️ On-demand AI Summary failed:', err.message);
+    }
+  }
 
   successResponse(res, 200, 'Reviews fetched', { reviews });
 };
