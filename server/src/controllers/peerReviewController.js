@@ -56,6 +56,7 @@ const submitReview = async (req, res) => {
 // @desc    Get reviews for a user in a project
 // @route   GET /api/peer-reviews/project/:projectId
 const getMyReviews = async (req, res) => {
+  console.log('💓 PEER REVIEW HEARTBEAT - Request Received');
   const { projectId } = req.params;
   const revieweeId = req.user._id;
 

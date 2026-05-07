@@ -23,6 +23,13 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
 
+// DISABLE CACHING GLOBALLY
+app.set('etag', false);
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  next();
+});
+
 // Security
 app.use(helmet());
 
