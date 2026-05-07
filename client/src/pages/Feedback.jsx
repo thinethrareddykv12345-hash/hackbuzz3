@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { FiStar, FiMessageSquare, FiShield, FiUser } from 'react-icons/fi';
+import { FiStar, FiMessageSquare, FiShield, FiUser, FiCpu } from 'react-icons/fi';
 
 const Feedback = () => {
   const { id: projectId } = useParams();
@@ -72,7 +72,7 @@ const Feedback = () => {
             <FiUser className="text-primary-400" /> Your Team
           </h3>
           <div className="space-y-4">
-            {project?.team?.members?.filter(m => m.user._id !== currentUser._id).map((member) => (
+            {project?.team?.members?.filter(m => m?.user?._id !== currentUser?._id).map((member) => (
               <button
                 key={member.user._id}
                 onClick={() => setSelectedUser(member.user)}
@@ -83,10 +83,10 @@ const Feedback = () => {
                 }`}
               >
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-accent-600 flex items-center justify-center font-bold text-white">
-                  {member.user.name.charAt(0)}
+                  {(member?.user?.name || 'T').charAt(0)}
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold">{member.user.name}</p>
+                  <p className="text-sm font-semibold">{member?.user?.name || 'Teammate'}</p>
                   <p className="text-[10px] text-dark-500 uppercase tracking-widest">{member.role}</p>
                 </div>
               </button>
