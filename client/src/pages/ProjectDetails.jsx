@@ -143,7 +143,7 @@ const ProjectDetails = () => {
                     <a key={i} href={file.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition-colors">
                       <FiPaperclip /> {file.fileName}
                     </a>
-                  )}
+                  ))}
                 </div>
 
                 {/* AI Insights Snippet */}
