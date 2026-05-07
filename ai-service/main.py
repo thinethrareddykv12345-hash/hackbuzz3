@@ -28,13 +28,13 @@ def ask_grok(prompt: str) -> str:
         return "Grok API Key missing. Please set XAI_API_KEY in .env"
     
     try:
-        url = "https://api.x.ai/v1/chat/completions"
+        url = "https://api.groq.com/openai/v1/chat/completions"
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {XAI_API_KEY}"
         }
         payload = {
-            "model": "grok-beta",
+            "model": "llama3-8b-8192",
             "messages": [
                 {"role": "system", "content": "You are a supportive college team coach AI."},
                 {"role": "user", "content": prompt}
