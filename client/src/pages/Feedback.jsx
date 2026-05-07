@@ -153,15 +153,40 @@ const Feedback = () => {
 
               {reviews.length > 0 ? (
                 <div className="space-y-6">
-                  {reviews.map((rev, i) => (
-                    <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                      <div className="flex items-center gap-3 mb-4">
-                        <FiMessageSquare className="text-primary-400" />
-                        <span className="text-sm font-bold text-white">AI Feedback Summary</span>
-                      </div>
-                      <p className="text-dark-300 text-sm italic">"{rev.aiSummary || 'Awaiting AI processing...'}"</p>
+                  {/* Unified AI Reflection */}
+                  <div className="p-8 rounded-3xl bg-primary-600/10 border border-primary-500/20 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <FiCpu size={120} />
                     </div>
-                  ))}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="p-2 rounded-lg bg-primary-500/20 text-primary-400">
+                        <FiCpu size={20} />
+                      </div>
+                      <span className="text-xs font-bold text-white uppercase tracking-widest">Team Consensus Reflection</span>
+                    </div>
+                    <p className="text-white text-lg italic leading-relaxed relative z-10">
+                      "{reviews[0]?.aiSummary || 'Our AI is still processing the team consensus. Check back shortly for your unified reflection.'}"
+                    </p>
+                  </div>
+
+                  <h4 className="text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] mt-12 mb-4">Anonymized Constructive Feedback</h4>
+                  <div className="space-y-4">
+                    {reviews.filter(r => r.comment).map((rev, i) => (
+                      <motion.div 
+                        key={i}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-white/10 transition-all"
+                      >
+                        <div className="flex items-center gap-3 mb-3 text-primary-400">
+                          <FiMessageSquare size={16} />
+                          <span className="text-[10px] font-bold uppercase tracking-widest">Teammate Note</span>
+                        </div>
+                        <p className="text-dark-300 text-sm leading-relaxed">{rev.comment}</p>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-20">

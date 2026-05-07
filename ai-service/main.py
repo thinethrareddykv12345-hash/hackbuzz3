@@ -266,6 +266,31 @@ Respond in STRICT JSON format:
         raise HTTPException(status_code=500, detail=f"Resume generation failed: {str(e)}")
 
 
+class PeerReviewData(BaseModel):
+    ratings: dict
+    comment: str
+
+@app.post("/summarize-feedback")
+async def summarize_feedback(reviews: list[PeerReviewData]):
+    if not reviews:
+        return {"summary": "No feedback received yet."}
+    
+    # Format reviews for AI
+    formatted_reviews = "\n".join([f"Rating: {r.ratings}, Comment: {r.comment}" for r in reviews])
+    
+    prompt = f"""
+    As a professional team coach, summarize these peer reviews for a student. 
+    Focus on constructive patterns, strengths, and areas for growth. 
+    Keep it supportive and actionable. Avoid identifying specific reviewers.
+    
+    Reviews:
+    {formatted_reviews}
+    """
+    
+    model = genai.GenerativeModel('gemini-pro')
+    response = model.generate_content(prompt)
+    return {"summary": response.text}
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("AI_PORT", 8000))

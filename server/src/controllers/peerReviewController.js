@@ -30,6 +30,26 @@ const submitReview = async (req, res) => {
     isAnonymous: isAnonymous !== undefined ? isAnonymous : true,
   });
 
+  // Trigger AI Summary update for the reviewee (Non-blocking)
+  const updateAiSummary = async () => {
+    try {
+      const axios = require('axios');
+      const allReviews = await PeerReview.find({ reviewee: revieweeId, project: projectId });
+      const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/summarize-feedback`, 
+        allReviews.map(r => ({ ratings: r.ratings, comment: r.comment }))
+      );
+      
+      await PeerReview.updateMany(
+        { reviewee: revieweeId, project: projectId },
+        { aiSummary: aiRes.data.summary }
+      );
+    } catch (err) {
+      console.error('AI Summary failed:', err.message);
+    }
+  };
+  
+  updateAiSummary();
+
   successResponse(res, 201, 'Review submitted successfully', { review });
 };
 
