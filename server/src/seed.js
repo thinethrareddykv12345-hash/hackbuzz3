@@ -45,8 +45,9 @@ const seedData = async () => {
       name: 'Alpha Squad',
       description: 'Building the next gen AI platform',
       inviteCode: 'ALPHA2024',
+      owner: users[0]._id,
       members: [
-        { user: users[0]._id, role: 'leader' },
+        { user: users[0]._id, role: 'admin' },
         { user: users[1]._id, role: 'member' },
         { user: users[2]._id, role: 'member' }
       ]
