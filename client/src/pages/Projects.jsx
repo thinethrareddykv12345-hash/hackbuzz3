@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiPlus, FiFolder, FiX } from 'react-icons/fi';
@@ -66,43 +66,43 @@ const Projects = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <motion.div
-            key={project._id}
-            onClick={() => navigate(`/projects/${project._id}`)}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="glass-card p-6 glass-card-hover cursor-pointer"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="p-3 rounded-xl bg-primary-600/20 text-primary-400">
-                <FiFolder size={24} />
+          <Link to={`/projects/${project._id}`} key={project._id} className="block">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="glass-card p-6 glass-card-hover cursor-pointer h-full"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-3 rounded-xl bg-primary-600/20 text-primary-400">
+                  <FiFolder size={24} />
+                </div>
+                <span className={`px-2 py-1 rounded-md text-[10px] font-bold border uppercase ${
+                  project.status === 'active' ? 'bg-green-900/30 text-green-400 border-green-800/50' : 'bg-yellow-900/30 text-yellow-400 border-yellow-800/50'
+                }`}>
+                  {project.status}
+                </span>
               </div>
-              <span className={`px-2 py-1 rounded-md text-[10px] font-bold border uppercase ${
-                project.status === 'active' ? 'bg-green-900/30 text-green-400 border-green-800/50' : 'bg-yellow-900/30 text-yellow-400 border-yellow-800/50'
-              }`}>
-                {project.status}
-              </span>
-            </div>
-            <h3 className="text-xl font-bold text-white">{project.title}</h3>
-            <p className="text-sm text-dark-400 mt-2 line-clamp-2">
-              {project.description}
-            </p>
-            <div className="mt-6 flex items-center justify-between">
-              <div className="flex -space-x-2">
-                {project.team?.members?.slice(0, 3).map((m, idx) => (
-                  <div key={idx} className="w-8 h-8 rounded-full border-2 border-dark-900 bg-primary-700 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
-                    {m.user?.name?.charAt(0) || 'U'}
-                  </div>
-                ))}
-                {project.team?.members?.length > 3 && (
-                  <div className="w-8 h-8 rounded-full border-2 border-dark-900 bg-dark-800 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
-                    +{project.team.members.length - 3}
-                  </div>
-                )}
+              <h3 className="text-xl font-bold text-white">{project.title}</h3>
+              <p className="text-sm text-dark-400 mt-2 line-clamp-2">
+                {project.description}
+              </p>
+              <div className="mt-6 flex items-center justify-between">
+                <div className="flex -space-x-2">
+                  {project.team?.members?.slice(0, 3).map((m, idx) => (
+                    <div key={idx} className="w-8 h-8 rounded-full border-2 border-dark-900 bg-primary-700 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                      {m.user?.name?.charAt(0) || 'U'}
+                    </div>
+                  ))}
+                  {project.team?.members?.length > 3 && (
+                    <div className="w-8 h-8 rounded-full border-2 border-dark-900 bg-dark-800 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                      +{project.team.members.length - 3}
+                    </div>
+                  )}
+                </div>
+                <span className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">Updated {new Date(project.updatedAt).toLocaleDateString()}</span>
               </div>
-              <span className="text-[10px] text-dark-500 font-bold uppercase tracking-widest">Updated {new Date(project.updatedAt).toLocaleDateString()}</span>
-            </div>
-          </motion.div>
+            </motion.div>
+          </Link>
         ))}
       </div>
 
