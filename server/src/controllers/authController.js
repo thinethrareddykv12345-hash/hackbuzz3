@@ -10,6 +10,7 @@ const logger = require('../utils/logger');
 // @desc    Register user
 // @route   POST /api/auth/register
 const register = async (req, res) => {
+  console.log('📦 Incoming Registration Data:', req.body);
   const { name, email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
