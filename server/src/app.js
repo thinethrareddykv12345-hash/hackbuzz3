@@ -23,6 +23,11 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log(`🚀 EMERGENCY LOG: ${req.method} ${req.url}`);
+  next();
+});
+
 // DISABLE CACHING GLOBALLY
 app.set('etag', false);
 app.use((req, res, next) => {
