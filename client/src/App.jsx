@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
+import Analytics from './pages/Analytics';
+import Feedback from './pages/Feedback';
 import TeamDetails from './pages/TeamDetails';
 import ProjectDetails from './pages/ProjectDetails';
 
