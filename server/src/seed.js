@@ -1,22 +1,28 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
+const path = require('path');
+
+// Models (Corrected paths for being inside src/)
 const User = require('./models/User');
 const Team = require('./models/Team');
 const Project = require('./models/Project');
 const Contribution = require('./models/Contribution');
 const AIAnalysis = require('./models/AIAnalysis');
 
-// Ensure you are in the server/ directory when running this
-dotenv.config({ path: './.env' });
+// Load .env from one level up (server/.env)
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const seedData = async () => {
   try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error('MONGODB_URI is not defined in .env file');
+    const mongoUri = process.env.MONGODB_URI;
+    
+    if (!mongoUri) {
+      throw new Error('MONGODB_URI is not defined in your .env file. Please check server/.env');
     }
 
-    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('🔗 Connecting to MongoDB...');
+    await mongoose.connect(mongoUri);
     console.log('🌱 Starting database seeding...');
 
     // 1. Clear existing data
