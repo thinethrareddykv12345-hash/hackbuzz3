@@ -18,19 +18,24 @@ const register = async (req, res) => {
     return errorResponse(res, 400, 'Email already registered');
   }
 
-  const user = await User.create({ name, email, password });
+  try {
+    const user = await User.create({ name, email, password });
 
-  const accessToken = generateAccessToken(user._id);
-  const refreshToken = generateRefreshToken(user._id);
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
 
-  user.refreshToken = refreshToken;
-  await user.save();
+    user.refreshToken = refreshToken;
+    await user.save();
 
-  successResponse(res, 201, 'Registration successful', {
-    user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role },
-    accessToken,
-    refreshToken,
-  });
+    successResponse(res, 201, 'Registration successful', {
+      user: { _id: user._id, name: user.name, email: user.email, avatar: user.avatar, role: user.role },
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    console.error('❌ Registration Database Error:', error.message);
+    return errorResponse(res, 400, error.message || 'Registration failed');
+  }
 };
 
 // @desc    Login user
