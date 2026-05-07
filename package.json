@@ -1,0 +1,14 @@
+{
+  "name": "teampulse-root",
+  "version": "1.0.0",
+  "description": "TeamPulse AI Root - Run all services",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install && cd ../ai-service && pip install -r requirements.txt",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "ai": "cd ai-service && python main.py"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
