@@ -17,7 +17,7 @@ const createProject = async (req, res) => {
     const newTeam = await Team.create({
       name: `${title} Team`,
       owner: req.user._id,
-      members: [{ user: req.user._id, role: 'admin' }],
+      members: [{ user: req.user._id, role: 'owner' }],
       inviteCode: Math.random().toString(36).substring(2, 9).toUpperCase()
     });
     finalTeamId = newTeam._id;
