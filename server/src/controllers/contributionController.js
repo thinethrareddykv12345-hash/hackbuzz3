@@ -25,8 +25,8 @@ const createContribution = async (req, res) => {
   if (req.files && req.files.length > 0) {
     req.files.forEach((file) => {
       attachments.push({
-        url: file.path,
-        publicId: file.filename,
+        url: file.path || '',
+        publicId: file.filename || `temp-${Date.now()}`,
         fileType: file.mimetype,
         fileName: file.originalname,
       });

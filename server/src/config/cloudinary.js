@@ -11,14 +11,21 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'teampulse',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'zip'],
-    transformation: [{ width: 1200, crop: 'limit' }],
-  },
-});
+// Use Cloudinary if configured, otherwise fallback to memory storage for local testing
+const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME && 
+                               process.env.CLOUDINARY_CLOUD_NAME !== 'YOUR_CLOUD_NAME' &&
+                               process.env.CLOUDINARY_API_KEY !== 'YOUR_CLOUDINARY_API_KEY';
+
+const storage = isCloudinaryConfigured 
+  ? new CloudinaryStorage({
+      cloudinary,
+      params: {
+        folder: 'teampulse',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'zip'],
+        transformation: [{ width: 1200, crop: 'limit' }],
+      },
+    })
+  : multer.memoryStorage();
 
 const upload = multer({
   storage,
