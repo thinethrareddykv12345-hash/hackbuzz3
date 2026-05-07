@@ -64,8 +64,15 @@ const getMyReviews = async (req, res) => {
     project: projectId,
   });
 
-  // If no summary exists yet, try to generate one now
-  if (reviews.length > 0 && !reviews[0].aiSummary) {
+  // Force trigger if summary is missing OR is just a placeholder
+  const needsSummary = reviews.length > 0 && (
+    !reviews[0].aiSummary || 
+    reviews[0].aiSummary.includes('Awaiting') || 
+    reviews[0].aiSummary.includes('analyzing') ||
+    reviews[0].aiSummary.length < 5
+  );
+
+  if (needsSummary) {
     try {
       const axios = require('axios');
       console.log(`📡 Requesting AI Summary from: ${process.env.AI_SERVICE_URL}/summarize-feedback`);
