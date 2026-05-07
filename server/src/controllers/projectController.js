@@ -59,7 +59,10 @@ const getTeamProjects = async (req, res) => {
 const getProjectById = async (req, res) => {
   const project = await Project.findById(req.params.id)
     .populate('createdBy', 'name avatar email')
-    .populate('team', 'name members')
+    .populate({
+      path: 'team',
+      populate: { path: 'members.user', select: 'name email avatar' }
+    })
     .populate('aiTaskSuggestions.assignedTo', 'name avatar');
 
   if (!project) return errorResponse(res, 404, 'Project not found');

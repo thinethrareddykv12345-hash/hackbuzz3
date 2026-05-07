@@ -73,7 +73,14 @@ const ProjectDetails = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-20 text-dark-400">Syncing Workspace...</div>;
+  if (loading) return <div className="text-center py-20 text-dark-400 font-bold tracking-widest animate-pulse uppercase">Syncing Workspace...</div>;
+
+  if (!project) return (
+    <div className="text-center py-20 glass-card mx-auto max-w-lg mt-20">
+      <p className="text-dark-400 italic">Project workspace is currently unavailable or was not found.</p>
+      <Link to="/projects" className="btn-primary mt-6 inline-block px-8">Back to Projects</Link>
+    </div>
+  );
 
   return (
     <div className="space-y-8 pb-20">

@@ -120,4 +120,37 @@ const getTeamHealth = async (req, res) => {
   });
 };
 
-module.exports = { getProjectAnalytics, getHeatmap, getTeamHealth };
+const axios = require('axios');
+
+// ... existing code ...
+
+// @desc    Get AI team insights
+// @route   GET /api/analytics/insights/:projectId
+const getProjectInsights = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const contributions = await Contribution.find({ project: projectId }).populate('aiAnalysis');
+
+    if (contributions.length === 0) {
+      return successResponse(res, 200, 'No contributions yet', {
+        insights: { overall_health: "Waiting for first contributions...", ghost_members: [] }
+      });
+    }
+
+    const aiData = contributions.map(c => ({
+      text: c.description,
+      category: c.category,
+      user_id: c.user.toString()
+    }));
+
+    const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/insights`, aiData);
+    successResponse(res, 200, 'AI Insights fetched', { insights: aiRes.data });
+  } catch (err) {
+    console.error('AI Service Error:', err.message);
+    successResponse(res, 200, 'AI Service unavailable', { 
+      insights: { overall_health: "AI analysis is currently processing. Check back soon!", ghost_members: [] } 
+    });
+  }
+};
+
+module.exports = { getProjectAnalytics, getHeatmap, getTeamHealth, getProjectInsights };
