@@ -8,23 +8,37 @@ const { successResponse, errorResponse } = require('../utils/apiResponse');
 // @desc    Create project
 // @route   POST /api/projects
 const createProject = async (req, res) => {
-  const { title, description, teamId, startDate, endDate, techStack, repositoryUrl } = req.body;
+  const { title, description, teamId, techStack, startDate, endDate, repositoryUrl, peerReviewEnabled } = req.body;
 
-  const team = await Team.findById(teamId);
-  if (!team) return errorResponse(res, 404, 'Team not found');
+  let finalTeamId = teamId;
 
-  const isMember = team.members.some((m) => m.user.toString() === req.user._id.toString());
-  if (!isMember) return errorResponse(res, 403, 'Not a team member');
+  // Auto-create a team if none provided
+  if (!finalTeamId) {
+    const newTeam = await Team.create({
+      name: `${title} Team`,
+      owner: req.user._id,
+      members: [{ user: req.user._id, role: 'admin' }],
+      inviteCode: Math.random().toString(36).substring(2, 9).toUpperCase()
+    });
+    finalTeamId = newTeam._id;
+  } else {
+    const team = await Team.findById(teamId);
+    if (!team) return errorResponse(res, 404, 'Team not found');
+
+    const isMember = team.members.some((m) => m.user.toString() === req.user._id.toString());
+    if (!isMember) return errorResponse(res, 403, 'Not a team member');
+  }
 
   const project = await Project.create({
     title,
     description,
-    team: teamId,
+    team: finalTeamId,
     createdBy: req.user._id,
-    startDate,
+    techStack,
+    startDate: startDate || Date.now(),
     endDate,
-    techStack: techStack || [],
     repositoryUrl,
+    peerReviewEnabled,
   });
 
   successResponse(res, 201, 'Project created', { project });
