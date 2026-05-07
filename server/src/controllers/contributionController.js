@@ -67,11 +67,11 @@ const createContribution = async (req, res) => {
 
   // AI Analysis Trigger (Non-blocking)
   try {
-    const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/analyze-contribution`, {
-      description,
+    const aiRes = await axios.post(`${process.env.AI_SERVICE_URL}/analyze`, {
+      text: description,
       category,
-      githubLink,
-      hoursSpent,
+      github_link: githubLink,
+      hours_spent: hoursSpent,
     });
 
     if (aiRes.data) {
